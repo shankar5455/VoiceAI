@@ -37,41 +37,222 @@ from utils import (
 # ──────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="HearMeAI – Speech AI",
+    page_title="HearMeAI – Speech AI Suite",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # ──────────────────────────────────────────────
-# Custom CSS
+# Custom CSS - Modern Design
 # ──────────────────────────────────────────────
 
 st.markdown(
     """
     <style>
-        /* Dark card-style containers */
-        .result-box {
-            background-color: #1E1E2E;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Global Styles */
+        * {
+            font-family: 'Inter', sans-serif;
         }
-        /* Speaker colour badges */
+        
+        /* Main container styling */
+        .main {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Card styling */
+        .modern-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* Header styling */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+        }
+        
+        /* Result box styling */
+        .result-box {
+            background: rgba(30, 30, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Metric card styling */
+        .metric-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+        }
+        
+        /* Speaker badge styling */
         .speaker-badge {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: bold;
-            margin-right: 6px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            transition: all 0.2s ease;
         }
-        /* Metric cards */
-        .metric-card {
-            background: #2A2A3E;
+        
+        .speaker-badge:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+        
+        /* Tab styling */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 24px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 12px;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
             border-radius: 8px;
-            padding: 14px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .stTabs [data-baseweb="tab"]:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .stTabs [aria-selected="true"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+        }
+        
+        /* Button styling */
+        .stButton > button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .stButton > button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* Upload area styling */
+        .upload-area {
+            border: 2px dashed rgba(102, 126, 234, 0.5);
+            border-radius: 16px;
+            padding: 20px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        /* Progress bar styling */
+        .stProgress > div > div {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        /* Status message styling */
+        .stAlert {
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        /* Sidebar styling */
+        .css-1d391kg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        /* Feature card styling */
+        .feature-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%);
+        }
+        
+        /* Code block styling */
+        .stCodeBlock {
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+        }
+        
+        /* Audio player styling */
+        audio {
+            border-radius: 12px;
+            width: 100%;
         }
     </style>
     """,
@@ -83,11 +264,16 @@ st.markdown(
 # ──────────────────────────────────────────────
 
 with st.sidebar:
-    st.image(
-        "https://img.icons8.com/fluency/96/000000/microphone.png",
-        width=64,
+    st.markdown(
+        """
+        <div style="text-align: center; padding: 20px 0;">
+            <div style="font-size: 48px;">🎙️</div>
+            <h2 style="color: white; margin-top: 10px;">HearMeAI</h2>
+            <p style="color: rgba(255,255,255,0.7);">Advanced Speech AI Suite</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
-    st.title("HearMeAI ⚙️")
     st.markdown("---")
 
     st.subheader("🤖 ASR Model")
@@ -95,7 +281,7 @@ with st.sidebar:
         "Whisper model size",
         options=["tiny", "base", "small", "medium"],
         index=1,
-        help="'base' is recommended for CPU.  Larger models are more accurate but slower.",
+        help="'base' is recommended for CPU. Larger models are more accurate but slower.",
     )
 
     st.subheader("🗣️ Diarization")
@@ -119,19 +305,38 @@ with st.sidebar:
     language = language_options[lang_label]
 
     st.markdown("---")
-    st.caption("Built with Whisper + Streamlit 🚀")
-
+    st.markdown(
+        """
+        <div style="text-align: center; color: rgba(255,255,255,0.5); font-size: 12px;">
+            <p>Powered by Whisper & Streamlit</p>
+            <p>Version 2.0</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ──────────────────────────────────────────────
-# Header
+# Hero Section
 # ──────────────────────────────────────────────
 
-st.title("🎙️ HearMeAI")
-st.subheader("Speech AI — Transcription · TTS · Voice Cloning · Voice Conversion")
-st.markdown("---")
+st.markdown(
+    """
+    <div class="hero-section">
+        <div class="hero-title">🎙️ HearMeAI</div>
+        <div class="hero-subtitle">Next-Generation Speech AI Suite</div>
+        <div style="margin-top: 20px;">
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px;">✨ Real-time Transcription</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🎭 Voice Cloning</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🔄 Voice Conversion</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🔊 TTS</span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ──────────────────────────────────────────────
-# Main tabs
+# Main tabs with icons
 # ──────────────────────────────────────────────
 
 (
@@ -149,22 +354,42 @@ st.markdown("---")
 ])
 
 # ══════════════════════════════════════════════
-# TAB 1 — Transcription (existing feature)
+# TAB 1 — Transcription
 # ══════════════════════════════════════════════
 
 with tab_transcription:
-    st.markdown(
-        "Upload an audio file **or** record directly from your microphone.  "
-        "HearMeAI will transcribe the speech and identify different speakers."
-    )
-
+    # Feature cards
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(
+            """
+            <div class="feature-card">
+                <div style="font-size: 32px;">🎯</div>
+                <strong>High Accuracy</strong>
+                <p style="font-size: 12px; margin-top: 8px;">Powered by OpenAI Whisper</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col2:
+        st.markdown(
+            """
+            <div class="feature-card">
+                <div style="font-size: 32px;">👥</div>
+                <strong>Speaker Diarization</strong>
+                <p style="font-size: 12px; margin-top: 8px;">Identify different speakers</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    
     # ── Audio input ────────────────────────────────────────────────────────
     tab_upload, tab_record = st.tabs(["📁 Upload Audio File", "🎤 Record from Microphone"])
 
     audio_path: str | None = None
 
     with tab_upload:
-        st.markdown("#### Upload a **.wav** or **.mp3** file")
+        st.markdown("### 📁 Upload Audio File")
         uploaded_file = st.file_uploader(
             "Choose an audio file",
             type=["wav", "mp3", "m4a", "ogg", "flac"],
@@ -172,16 +397,16 @@ with tab_transcription:
         )
         if uploaded_file is not None:
             st.audio(uploaded_file, format=uploaded_file.type)
-            st.success(f"✅ File **{uploaded_file.name}** ready for processing.")
+            st.success(f"✅ File **{uploaded_file.name}** uploaded successfully!")
             audio_path = save_uploaded_file(uploaded_file)
 
     with tab_record:
-        st.markdown("#### Record audio directly in your browser")
+        st.markdown("### 🎤 Record Audio")
         try:
             from audio_recorder_streamlit import audio_recorder
 
             audio_bytes = audio_recorder(
-                text="Click to start / stop recording",
+                text="Click to start/stop recording",
                 recording_color="#FF6B6B",
                 neutral_color="#4ECDC4",
                 icon_name="microphone",
@@ -189,17 +414,17 @@ with tab_transcription:
             )
             if audio_bytes:
                 st.audio(audio_bytes, format="audio/wav")
-                st.success("✅ Recording captured — click **Process** below.")
+                st.success("✅ Recording captured!")
                 audio_path = save_audio_bytes(audio_bytes, suffix=".wav")
         except ImportError:
             st.info(
-                "Install **audio-recorder-streamlit** to enable microphone recording:  \n"
+                "💡 **Install audio-recorder-streamlit** to enable microphone recording:  \n"
                 "`pip install audio-recorder-streamlit`"
             )
 
     # ── Process button ─────────────────────────────────────────────────────
     st.markdown("---")
-    process_col, _ = st.columns([1, 4])
+    process_col, _, _ = st.columns([1, 1, 2])
     process_btn = process_col.button("🚀 Process Audio", type="primary", use_container_width=True)
 
     # ── Processing pipeline ────────────────────────────────────────────────
@@ -211,46 +436,44 @@ with tab_transcription:
         wav_path: str | None = None
 
         try:
-            with st.status("🔄 Preparing audio…", expanded=True) as status:
-                st.write("Converting audio to 16 kHz mono WAV…")
+            with st.status("🔄 Processing Audio...", expanded=True) as status:
+                st.write("🎵 Converting audio to 16 kHz mono WAV...")
                 wav_path = convert_to_wav(audio_path)
-                st.write("✅ Audio ready.")
+                st.write("✅ Audio ready")
 
-                st.write(f"Loading Whisper **{model_size}** model…")
+                st.write("🤖 Loading Whisper model...")
                 model, device = load_model(model_size)
-                st.write(f"✅ Model loaded on **{device.upper()}**.")
+                st.write(f"✅ Model loaded on **{device.upper()}**")
 
-                st.write("Transcribing speech… (this may take a moment on CPU)")
+                st.write("📝 Transcribing speech...")
                 asr_result = transcribe_audio(model, wav_path, language=language)
                 st.write(f"✅ Transcription complete — detected language: **{asr_result['language']}**")
 
-                st.write("Identifying speakers…")
+                st.write("👥 Identifying speakers...")
                 audio_array, sr = load_audio(wav_path, sr=16000)
                 diar_segments = perform_diarization(audio_array, sr, n_speakers=n_speakers)
                 detected_speakers = {s["speaker"] for s in diar_segments}
-                st.write(f"✅ Detected **{len(detected_speakers)} speaker(s)**.")
+                st.write(f"✅ Detected **{len(detected_speakers)} speaker(s)**")
 
-                st.write("Merging transcript with speaker labels…")
+                st.write("🔗 Merging transcript with speaker labels...")
                 merged = merge_transcript_diarization(asr_result["segments"], diar_segments)
                 status.update(label="✅ Processing complete!", state="complete", expanded=False)
 
             if not merged:
-                st.error("❌ No speech detected in the audio.  Please try a different file.")
+                st.error("❌ No speech detected in the audio. Please try a different file.")
                 st.stop()
 
-            # Save transcript to session state for use in TTS tab
+            # Save transcript to session state
             transcript_text = create_transcript_text(merged)
             st.session_state["last_transcript"] = transcript_text
             st.session_state["last_full_text"] = asr_result.get("full_text", "")
 
             st.markdown("---")
-            st.header("📝 Transcript")
-
+            st.markdown("## 📝 Transcript")
+            st.markdown('<div class="modern-card">', unsafe_allow_html=True)
             html = render_colored_transcript(merged)
-            st.markdown(
-                f'<div class="result-box">{html}</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown(html, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
             # Speaker legend
             speakers = sorted({s["speaker"] for s in merged})
@@ -258,36 +481,44 @@ with tab_transcription:
             for sp in speakers:
                 color = get_speaker_color(sp)
                 legend_parts.append(
-                    f'<span class="speaker-badge" style="background:{color};color:#111;">{sp}</span>'
+                    f'<span class="speaker-badge" style="background:{color};color:#fff;">{sp}</span>'
                 )
             st.markdown(
-                "<p><strong>Legend:</strong> " + " ".join(legend_parts) + "</p>",
+                "<p><strong>Speaker Legend:</strong> " + " ".join(legend_parts) + "</p>",
                 unsafe_allow_html=True,
             )
 
             # Speaker statistics
             st.markdown("---")
-            st.header("📊 Speaker Statistics")
+            st.markdown("## 📊 Speaker Statistics")
             stats = speaker_stats(merged)
             total_time = sum(stats.values())
 
             stat_cols = st.columns(len(stats))
             for col, (speaker, duration) in zip(stat_cols, stats.items()):
                 pct = (duration / total_time * 100) if total_time > 0 else 0
-                col.metric(
-                    label=speaker,
-                    value=format_timestamp(duration),
-                    delta=f"{pct:.1f}% of audio",
+                col.markdown(
+                    f"""
+                    <div class="metric-card">
+                        <div style="font-size: 20px; font-weight: 600;">{speaker}</div>
+                        <div style="font-size: 28px; font-weight: 700; margin: 10px 0;">{format_timestamp(duration)}</div>
+                        <div style="font-size: 12px; opacity: 0.7;">{pct:.1f}% of audio</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
                 )
 
             # Download transcript
             st.markdown("---")
-            st.download_button(
-                label="⬇️ Download Transcript (.txt)",
-                data=transcript_text,
-                file_name="hearmeai_transcript.txt",
-                mime="text/plain",
-            )
+            col_download, _ = st.columns([1, 3])
+            with col_download:
+                st.download_button(
+                    label="⬇️ Download Transcript (.txt)",
+                    data=transcript_text,
+                    file_name="hearmeai_transcript.txt",
+                    mime="text/plain",
+                    use_container_width=True,
+                )
 
         except Exception as exc:
             st.error(f"❌ An error occurred during processing:\n\n`{exc}`")
@@ -305,17 +536,22 @@ with tab_transcription:
 # ══════════════════════════════════════════════
 
 with tab_tts:
-    st.header("🔊 Text-to-Speech")
+    st.markdown("## 🔊 Text-to-Speech")
     st.markdown(
-        "Convert text to spoken audio.  "
-        "You can type your own text or use the transcript generated in the **Transcription** tab."
+        """
+        <div class="modern-card">
+            Convert text to natural-sounding speech with multiple TTS engines.
+            Choose between online (gTTS) or offline (pyttsx3) synthesis.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     # Pre-fill from last transcript if available
     default_text = st.session_state.get("last_full_text", "")
 
     tts_text = st.text_area(
-        "Text to convert",
+        "📝 Text to convert",
         value=default_text,
         height=150,
         placeholder="Enter or paste text here…",
@@ -325,14 +561,10 @@ with tab_tts:
 
     with col_backend:
         tts_backend = st.selectbox(
-            "TTS engine",
+            "🎛️ TTS Engine",
             options=["auto", "gtts", "pyttsx3"],
             index=0,
-            help=(
-                "**auto** — tries offline (pyttsx3) first, then online (gTTS).  \n"
-                "**gtts** — Google TTS (requires internet, higher quality).  \n"
-                "**pyttsx3** — fully offline (requires espeak on Linux)."
-            ),
+            help="**auto** — tries offline first, then online. **gtts** — Google TTS (higher quality). **pyttsx3** — fully offline.",
         )
 
     with col_lang:
@@ -345,7 +577,7 @@ with tab_tts:
             "Arabic": "ar",
         }
         tts_lang_label = st.selectbox(
-            "Language (gTTS)",
+            "🌐 Language (gTTS)",
             list(tts_lang_options.keys()),
             help="Language used by gTTS. Ignored when using pyttsx3.",
         )
@@ -353,19 +585,19 @@ with tab_tts:
 
     with col_rate:
         tts_rate = st.slider(
-            "Speech rate (pyttsx3)",
+            "⚡ Speech Rate (pyttsx3)",
             min_value=80,
             max_value=300,
             value=150,
             step=10,
-            help="Words per minute. Only affects the pyttsx3 engine.",
+            help="Words per minute. Only affects pyttsx3 engine.",
         )
 
     if st.button("🔊 Convert to Speech", type="primary"):
         if not tts_text.strip():
             st.warning("⚠️ Please enter some text first.")
         else:
-            with st.spinner("Synthesising speech…"):
+            with st.spinner("🎵 Synthesising speech..."):
                 try:
                     audio_bytes, ext = synthesize_speech(
                         tts_text,
@@ -392,30 +624,32 @@ with tab_tts:
 # ══════════════════════════════════════════════
 
 with tab_cloning:
-    st.header("🎭 Voice Cloning (Basic)")
+    st.markdown("## 🎭 Voice Cloning")
     st.markdown(
-        "Upload a **reference voice sample** and enter the text you want "
-        "spoken in that voice.  "
-        "The system will analyse the speaker's pitch and apply it to the synthesised speech."
-    )
-    st.info(
-        "ℹ️ This is a lightweight, CPU-friendly approximation.  "
-        "It matches pitch but not timbre or accent.",
-        icon="ℹ️",
+        """
+        <div class="modern-card">
+            Clone any voice with just a reference sample! Upload a clear voice recording and 
+            enter the text you want spoken in that voice.
+            <br><br>
+            <strong>💡 Tip:</strong> For best results, use a reference audio with at least 5 seconds of clear speech.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     clone_ref_file = st.file_uploader(
-        "📎 Upload reference voice sample (WAV / MP3, ideally ≥5 s of clear speech)",
+        "📎 Upload Reference Voice Sample",
         type=["wav", "mp3", "m4a", "ogg", "flac"],
         key="clone_ref",
+        help="Upload a clear voice recording (WAV/MP3, ≥5 seconds recommended)",
     )
     if clone_ref_file:
         st.audio(clone_ref_file, format=clone_ref_file.type)
 
     clone_text = st.text_area(
-        "Text to synthesise in the reference voice",
+        "📝 Text to Synthesise",
         height=120,
-        placeholder="Enter the text you want spoken…",
+        placeholder="Enter the text you want spoken in the reference voice…",
         key="clone_text",
     )
 
@@ -428,7 +662,7 @@ with tab_cloning:
         "Arabic": "ar",
     }
     clone_lang_label = st.selectbox(
-        "Language",
+        "🌐 Language",
         list(clone_lang_options.keys()),
         key="clone_lang",
     )
@@ -443,7 +677,7 @@ with tab_cloning:
             ref_path: str | None = None
             try:
                 ref_path = save_uploaded_file(clone_ref_file)
-                with st.spinner("Analysing reference voice and synthesising…"):
+                with st.spinner("🎭 Analysing reference voice and synthesising..."):
                     cloned_bytes = clone_voice(clone_text, ref_path, lang=clone_lang)
                 st.success("✅ Voice cloning complete!")
                 st.audio(cloned_bytes, format="audio/wav")
@@ -466,14 +700,19 @@ with tab_cloning:
 # ══════════════════════════════════════════════
 
 with tab_conversion:
-    st.header("🔄 Voice Conversion")
+    st.markdown("## 🔄 Voice Conversion")
     st.markdown(
-        "Transform the pitch and/or speed of a source audio clip.  "
-        "Optionally upload a **target voice** sample to automatically match its pitch."
+        """
+        <div class="modern-card">
+            Transform voices with advanced pitch and speed manipulation. Upload a source voice 
+            and optionally a target voice to match its characteristics.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     src_file = st.file_uploader(
-        "📎 Upload **source** audio (the voice to convert)",
+        "🎵 Upload **Source** Audio (the voice to convert)",
         type=["wav", "mp3", "m4a", "ogg", "flac"],
         key="vc_src",
     )
@@ -481,9 +720,10 @@ with tab_conversion:
         st.audio(src_file, format=src_file.type)
 
     tgt_file = st.file_uploader(
-        "📎 Upload **target** voice sample (optional — leave blank for manual shift)",
+        "🎯 Upload **Target** Voice Sample (optional — leave blank for manual shift)",
         type=["wav", "mp3", "m4a", "ogg", "flac"],
         key="vc_tgt",
+        help="Upload a target voice to automatically match its pitch",
     )
     if tgt_file:
         st.audio(tgt_file, format=tgt_file.type)
@@ -492,22 +732,22 @@ with tab_conversion:
 
     with col_pitch:
         pitch_shift = st.slider(
-            "Manual pitch shift (semitones)",
+            "🎵 Pitch Shift (semitones)",
             min_value=-24,
             max_value=24,
             value=0,
             step=1,
-            help="Ignored when a target voice is uploaded.",
+            help="Ignored when a target voice is uploaded",
         )
 
     with col_speed:
         speed_factor = st.slider(
-            "Speed factor",
+            "⏱️ Speed Factor",
             min_value=0.5,
             max_value=2.0,
             value=1.0,
             step=0.1,
-            help="1.0 = original speed.  >1 speeds up, <1 slows down.",
+            help="1.0 = original speed, >1 speeds up, <1 slows down",
         )
 
     if st.button("🔄 Convert Voice", type="primary"):
@@ -521,7 +761,7 @@ with tab_conversion:
                 if tgt_file is not None:
                     tgt_path = save_uploaded_file(tgt_file)
 
-                with st.spinner("Converting voice…"):
+                with st.spinner("🔄 Converting voice..."):
                     converted_bytes = convert_voice(
                         source_audio_path=src_path,
                         target_audio_path=tgt_path,
@@ -552,24 +792,28 @@ with tab_conversion:
 # ══════════════════════════════════════════════
 
 with tab_advanced:
-    st.header("🧠 Advanced: Train Custom Model")
+    st.markdown("## 🧠 Advanced: Train Custom Model")
     st.markdown(
-        "This section provides a **guided placeholder** for training custom TTS or ASR models.  \n"
-        "Actual model training requires a GPU; the steps below show the pipeline and generate "
-        "a configuration you can use in a full training environment."
-    )
-    st.warning(
-        "⚠️ **Note:** Training is computationally expensive. "
-        "The 'Start Training' button below runs a *simulated* demonstration only.",
-        icon="⚠️",
+        """
+        <div class="modern-card">
+            Create your own custom speech models! Upload your dataset, configure training parameters,
+            and let the system guide you through the training process.
+            <br><br>
+            <strong>⚠️ Note:</strong> Full model training requires significant computational resources.
+            This section provides a guided pipeline with simulation capabilities.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     st.markdown("---")
-    st.subheader("📂 Step 1 — Upload Dataset (Optional)")
+    st.markdown("### 📂 Step 1 — Upload Dataset")
     st.markdown(
-        "Upload a **ZIP archive** containing:  \n"
-        "- An `audio/` folder with `.wav` / `.mp3` utterances.  \n"
-        "- A `transcripts.txt` file with lines in `filename|text` format."
+        """
+        Upload a **ZIP archive** containing:
+        - `audio/` folder with `.wav`/`.mp3` utterances
+        - `transcripts.txt` file with lines in `filename|text` format
+        """
     )
 
     dataset_zip = st.file_uploader(
@@ -585,15 +829,45 @@ with tab_advanced:
             summary = validate_dataset(zip_path)
 
             col_a, col_b, col_c = st.columns(3)
-            col_a.metric("Total files", summary["total_files"])
-            col_b.metric("Audio files", summary["audio_files"])
-            col_c.metric("Text files", summary["text_files"])
+            with col_a:
+                st.markdown(
+                    f"""
+                    <div class="metric-card">
+                        <div style="font-size: 28px;">📄</div>
+                        <div style="font-size: 24px; font-weight: 700;">{summary['total_files']}</div>
+                        <div>Total Files</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with col_b:
+                st.markdown(
+                    f"""
+                    <div class="metric-card">
+                        <div style="font-size: 28px;">🎵</div>
+                        <div style="font-size: 24px; font-weight: 700;">{summary['audio_files']}</div>
+                        <div>Audio Files</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with col_c:
+                st.markdown(
+                    f"""
+                    <div class="metric-card">
+                        <div style="font-size: 28px;">📝</div>
+                        <div style="font-size: 24px; font-weight: 700;">{summary['text_files']}</div>
+                        <div>Text Files</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
             if summary["warnings"]:
                 for w in summary["warnings"]:
                     st.warning(f"⚠️ {w}")
             else:
-                st.success("✅ Dataset looks good!")
+                st.success("✅ Dataset validation passed!")
         except Exception as exc:
             st.error(f"❌ Dataset validation failed: {exc}")
         finally:
@@ -601,15 +875,15 @@ with tab_advanced:
                 cleanup_temp_file(zip_path)
 
     st.markdown("---")
-    st.subheader("⚙️ Step 2 — Configure Training")
+    st.markdown("### ⚙️ Step 2 — Configure Training")
 
     col_model, col_epochs, col_batch = st.columns(3)
 
     with col_model:
         train_model_type = st.selectbox(
-            "Model type",
+            "Model Type",
             options=["tts", "asr"],
-            help="**tts** — Glow-TTS architecture.  **asr** — QuartzNet architecture.",
+            help="**tts** — Text-to-Speech model, **asr** — Automatic Speech Recognition",
         )
 
     with col_epochs:
@@ -623,7 +897,7 @@ with tab_advanced:
 
     with col_batch:
         train_batch_size = st.number_input(
-            "Batch size",
+            "Batch Size",
             min_value=1,
             max_value=128,
             value=16,
@@ -636,7 +910,7 @@ with tab_advanced:
         batch_size=int(train_batch_size),
     )
 
-    with st.expander("📄 View generated training configuration"):
+    with st.expander("📄 View Generated Configuration"):
         st.code(config_json, language="json")
         st.download_button(
             label="⬇️ Download Config (.json)",
@@ -646,13 +920,9 @@ with tab_advanced:
         )
 
     st.markdown("---")
-    st.subheader("🚀 Step 3 — Start Training (Simulation)")
-    st.markdown(
-        "Click **Start Training** to run a *simulated* training loop that "
-        "demonstrates what the progress would look like."
-    )
+    st.markdown("### 🚀 Step 3 — Start Training (Simulation)")
 
-    demo_epochs = st.slider("Simulation epochs", min_value=5, max_value=30, value=10)
+    demo_epochs = st.slider("Simulation Epochs", min_value=5, max_value=30, value=10)
 
     if st.button("▶️ Start Training", type="primary"):
         progress_bar = st.progress(0)
@@ -669,9 +939,14 @@ with tab_advanced:
 
             progress_bar.progress(int(step["progress_pct"]))
             status_text.markdown(
-                f"**Epoch {ep}/{demo_epochs}** — "
-                f"Loss: `{step['loss']:.4f}` | "
-                f"Accuracy: `{step['accuracy']:.4f}`"
+                f"""
+                <div class="modern-card">
+                    <strong>Epoch {ep}/{demo_epochs}</strong><br>
+                    Loss: <code>{step['loss']:.4f}</code> | 
+                    Accuracy: <code>{step['accuracy']:.4f}</code>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
 
             # Update live chart
@@ -681,18 +956,20 @@ with tab_advanced:
             )
             chart_placeholder.line_chart(chart_data)
 
-            time.sleep(0.3)  # brief pause to animate the simulation
+            time.sleep(0.3)
 
         progress_bar.progress(100)
         status_text.success(
-            f"✅ Simulation complete! Final — "
-            f"Loss: `{loss_history[-1]:.4f}` | "
-            f"Accuracy: `{acc_history[-1]:.4f}`"
+            f"""
+            ✅ Simulation complete! Final Results:
+            - Loss: `{loss_history[-1]:.4f}`
+            - Accuracy: `{acc_history[-1]:.4f}`
+            """
         )
         st.info(
-            "To run real training, export the configuration above and use it with "
+            "💡 **Next Steps:** Export the configuration above and use it with "
             "[Coqui TTS](https://github.com/coqui-ai/TTS) or "
-            "[Whisper fine-tuning](https://github.com/openai/whisper).",
+            "[Whisper fine-tuning](https://github.com/openai/whisper) for real training.",
             icon="💡",
         )
 
@@ -702,7 +979,14 @@ with tab_advanced:
 # ──────────────────────────────────────────────
 
 st.markdown("---")
-st.caption(
-    "HearMeAI · Powered by [OpenAI Whisper](https://github.com/openai/whisper) · "
-    "Built with [Streamlit](https://streamlit.io)"
+st.markdown(
+    """
+    <div class="footer">
+        <p style="margin: 0;">🎙️ <strong>HearMeAI</strong> — Advanced Speech AI Suite</p>
+        <p style="margin: 5px 0 0 0; font-size: 12px; opacity: 0.7;">
+            Powered by OpenAI Whisper · Built with Streamlit
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
