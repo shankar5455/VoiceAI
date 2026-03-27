@@ -141,3 +141,29 @@ def speaker_stats(segments: list) -> dict:
         duration = seg["end"] - seg["start"]
         totals[speaker] = totals.get(speaker, 0.0) + duration
     return totals
+
+
+# ──────────────────────────────────────────────
+# Shared audio analysis helpers
+# ──────────────────────────────────────────────
+
+def estimate_mean_f0(audio: "np.ndarray", sr: int) -> float:
+    """
+    Return the mean voiced fundamental frequency (Hz) of an audio array.
+
+    Uses librosa.pyin for pitch tracking.  Falls back to 150 Hz (typical adult
+    speech) when no voiced frames are found.
+
+    Parameters
+    ----------
+    audio : 1-D float32 numpy array (mono)
+    sr    : sample rate (Hz)
+    """
+    f0, _, _ = librosa.pyin(
+        audio,
+        fmin=librosa.note_to_hz("C2"),   # ~65 Hz
+        fmax=librosa.note_to_hz("C7"),   # ~2093 Hz
+        sr=sr,
+    )
+    voiced = f0[~np.isnan(f0)]
+    return float(np.mean(voiced)) if len(voiced) > 0 else 150.0
