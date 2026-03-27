@@ -1,5 +1,5 @@
 """
-voice_conversion.py — Lightweight voice conversion for HearMeAI.
+voice_conversion.py — Lightweight voice conversion for VoiceAI.
 
 Approach (CPU-friendly, no GPU required):
   - If a *target* reference audio is provided:

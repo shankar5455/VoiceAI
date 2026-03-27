@@ -1,5 +1,5 @@
 """
-tts.py — Text-to-Speech module for HearMeAI.
+tts.py — Text-to-Speech module for VoiceAI.
 
 Supports two backends:
   - gTTS     (Google Text-to-Speech, requires internet, produces MP3)

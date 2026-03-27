@@ -1,5 +1,5 @@
 """
-training.py — Custom model training pipeline (placeholder) for HearMeAI.
+training.py — Custom model training pipeline (placeholder) for VoiceAI.
 
 This module provides an instructional / demonstrative training pipeline.
 

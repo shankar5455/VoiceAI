@@ -1,5 +1,5 @@
 """
-utils.py — Audio utilities, formatting helpers, and display functions for HearMeAI.
+utils.py — Audio utilities, formatting helpers, and display functions for VoiceAI.
 """
 
 import os

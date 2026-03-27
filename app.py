@@ -1,5 +1,5 @@
 """
-app.py — HearMeAI: Speech AI Web App with Transcription, TTS, Voice Cloning,
+app.py — VoiceAI: Speech AI Web App with Transcription, TTS, Voice Cloning,
          Voice Conversion and Training.
 
 Run with:
@@ -37,8 +37,8 @@ from utils import (
 # ──────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="HearMeAI – Speech AI Suite",
-    page_icon="🎙️",
+    page_title="VoiceAI – Speech AI Suite",
+    page_icon="🔊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -51,87 +51,105 @@ st.markdown(
     """
     <style>
         /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
         /* Global Styles */
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
-        
-        /* Main container styling */
+
+        /* Main container */
         .main {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0a0e1a;
         }
-        
+
         /* Card styling */
         .modern-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0,198,255,0.08) 0%, rgba(0,114,255,0.05) 100%);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
             padding: 24px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(0,198,255,0.18);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .modern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,198,255,0.12);
         }
-        
-        /* Header styling */
+
+        /* Hero section */
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            padding: 40px;
+            background: linear-gradient(135deg, #0a0e1a 0%, #0d1b3e 50%, #0a1628 100%);
+            border-radius: 22px;
+            padding: 48px 40px;
             margin-bottom: 30px;
             text-align: center;
             color: white;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 0 60px rgba(0,198,255,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,198,255,0.2);
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(0,198,255,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
         .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
+            font-size: 3.2rem;
+            font-weight: 800;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            background: linear-gradient(135deg, #00c6ff 0%, #4facfe 50%, #00f2fe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -1px;
         }
-        
+
         .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.95;
+            font-size: 1.15rem;
+            opacity: 0.8;
             margin-bottom: 0;
+            color: #b0c4de;
+            font-weight: 300;
         }
-        
+
         /* Result box styling */
         .result-box {
-            background: rgba(30, 30, 46, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(12px);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(0,198,255,0.12);
         }
-        
+
         /* Metric card styling */
         .metric-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(0,198,255,0.12) 0%, rgba(0,114,255,0.08) 100%);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 20px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(0,198,255,0.18);
             transition: all 0.3s ease;
         }
-        
+
         .metric-card:hover {
             transform: scale(1.05);
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(0,198,255,0.22) 0%, rgba(0,114,255,0.16) 100%);
+            box-shadow: 0 8px 24px rgba(0,198,255,0.15);
         }
-        
+
         /* Speaker badge styling */
         .speaker-badge {
             display: inline-block;
@@ -142,113 +160,116 @@ st.markdown(
             margin-right: 8px;
             transition: all 0.2s ease;
         }
-        
+
         .speaker-badge:hover {
             transform: scale(1.05);
-            filter: brightness(1.1);
+            filter: brightness(1.15);
         }
-        
+
         /* Tab styling */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 24px;
-            background: rgba(255,255,255,0.05);
+            gap: 20px;
+            background: rgba(0,198,255,0.05);
             padding: 8px;
-            border-radius: 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,198,255,0.1);
         }
-        
+
         .stTabs [data-baseweb="tab"] {
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 8px 20px;
             font-weight: 500;
             transition: all 0.3s ease;
+            color: #8899bb;
         }
-        
+
         .stTabs [data-baseweb="tab"]:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,198,255,0.1);
+            color: #00c6ff;
         }
-        
+
         .stTabs [aria-selected="true"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
             color: white !important;
+            box-shadow: 0 4px 14px rgba(0,198,255,0.35);
         }
-        
+
         /* Button styling */
         .stButton > button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 10px 24px;
+            padding: 10px 28px;
             font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.3px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0,198,255,0.3);
         }
-        
+
         .stButton > button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 24px rgba(0,198,255,0.4);
         }
-        
+
         /* Upload area styling */
         .upload-area {
-            border: 2px dashed rgba(102, 126, 234, 0.5);
+            border: 2px dashed rgba(0,198,255,0.35);
             border-radius: 16px;
             padding: 20px;
             text-align: center;
             transition: all 0.3s ease;
         }
-        
+
         .upload-area:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            border-color: #00c6ff;
+            background: rgba(0,198,255,0.04);
         }
-        
+
         /* Progress bar styling */
         .stProgress > div > div {
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
         }
-        
+
         /* Status message styling */
         .stAlert {
             border-radius: 12px;
             border-left: 4px solid;
         }
-        
-        /* Sidebar styling */
-        .css-1d391kg {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-        
+
         /* Footer styling */
         .footer {
             text-align: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
+            padding: 22px;
+            background: linear-gradient(135deg, rgba(0,198,255,0.06) 0%, rgba(0,114,255,0.04) 100%);
+            border-radius: 14px;
             margin-top: 30px;
+            border: 1px solid rgba(0,198,255,0.12);
         }
-        
+
         /* Feature card styling */
         .feature-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(0,198,255,0.1) 0%, rgba(0,114,255,0.07) 100%);
             backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 16px;
+            padding: 18px 16px;
             text-align: center;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(0,198,255,0.15);
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%);
+            background: linear-gradient(135deg, rgba(0,198,255,0.18) 0%, rgba(0,114,255,0.14) 100%);
+            box-shadow: 0 12px 30px rgba(0,198,255,0.12);
         }
-        
+
         /* Code block styling */
         .stCodeBlock {
             border-radius: 12px;
-            background: rgba(0,0,0,0.3);
         }
-        
+
         /* Audio player styling */
         audio {
             border-radius: 12px;
@@ -266,10 +287,14 @@ st.markdown(
 with st.sidebar:
     st.markdown(
         """
-        <div style="text-align: center; padding: 20px 0;">
-            <div style="font-size: 48px;">🎙️</div>
-            <h2 style="color: white; margin-top: 10px;">HearMeAI</h2>
-            <p style="color: rgba(255,255,255,0.7);">Advanced Speech AI Suite</p>
+        <div style="text-align: center; padding: 24px 0 16px 0;">
+            <div style="font-size: 52px; filter: drop-shadow(0 0 12px rgba(0,198,255,0.5));">🔊</div>
+            <h2 style="background: linear-gradient(135deg, #00c6ff, #0072ff);
+                       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                       background-clip: text; margin-top: 10px; font-weight: 800; letter-spacing: -0.5px;">
+                VoiceAI
+            </h2>
+            <p style="color: rgba(176,196,222,0.75); font-size: 13px; margin-top: 4px;">Advanced Speech AI Suite</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -307,9 +332,9 @@ with st.sidebar:
     st.markdown("---")
     st.markdown(
         """
-        <div style="text-align: center; color: rgba(255,255,255,0.5); font-size: 12px;">
-            <p>Powered by Whisper & Streamlit</p>
-            <p>Version 2.0</p>
+        <div style="text-align: center; color: rgba(176,196,222,0.45); font-size: 11px; padding: 4px 0;">
+            <p style="margin: 0;">Powered by Whisper &amp; Streamlit</p>
+            <p style="margin: 4px 0 0 0;">Version 2.0</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -322,13 +347,25 @@ with st.sidebar:
 st.markdown(
     """
     <div class="hero-section">
-        <div class="hero-title">🎙️ HearMeAI</div>
+        <div class="hero-title">🔊 VoiceAI</div>
         <div class="hero-subtitle">Next-Generation Speech AI Suite</div>
-        <div style="margin-top: 20px;">
-            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px;">✨ Real-time Transcription</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🎭 Voice Cloning</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🔄 Voice Conversion</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;">🔊 TTS</span>
+        <div style="margin-top: 22px;">
+            <span style="background: rgba(0,198,255,0.18); border: 1px solid rgba(0,198,255,0.3);
+                         padding: 5px 14px; border-radius: 20px; font-size: 12px; color: #b0e8ff;">
+                ✨ Real-time Transcription
+            </span>
+            <span style="background: rgba(0,198,255,0.18); border: 1px solid rgba(0,198,255,0.3);
+                         padding: 5px 14px; border-radius: 20px; font-size: 12px; margin-left: 8px; color: #b0e8ff;">
+                🎭 Voice Cloning
+            </span>
+            <span style="background: rgba(0,198,255,0.18); border: 1px solid rgba(0,198,255,0.3);
+                         padding: 5px 14px; border-radius: 20px; font-size: 12px; margin-left: 8px; color: #b0e8ff;">
+                🔄 Voice Conversion
+            </span>
+            <span style="background: rgba(0,198,255,0.18); border: 1px solid rgba(0,198,255,0.3);
+                         padding: 5px 14px; border-radius: 20px; font-size: 12px; margin-left: 8px; color: #b0e8ff;">
+                🔊 TTS
+            </span>
         </div>
     </div>
     """,
@@ -515,7 +552,7 @@ with tab_transcription:
                 st.download_button(
                     label="⬇️ Download Transcript (.txt)",
                     data=transcript_text,
-                    file_name="hearmeai_transcript.txt",
+                    file_name="voiceai_transcript.txt",
                     mime="text/plain",
                     use_container_width=True,
                 )
@@ -611,7 +648,7 @@ with tab_tts:
                     st.download_button(
                         label=f"⬇️ Download Audio ({ext})",
                         data=audio_bytes,
-                        file_name=f"hearmeai_tts{ext}",
+                        file_name=f"voiceai_tts{ext}",
                         mime=mime,
                     )
                 except Exception as exc:
@@ -684,7 +721,7 @@ with tab_cloning:
                 st.download_button(
                     label="⬇️ Download Cloned Audio (.wav)",
                     data=cloned_bytes,
-                    file_name="hearmeai_cloned.wav",
+                    file_name="voiceai_cloned.wav",
                     mime="audio/wav",
                 )
             except Exception as exc:
@@ -774,7 +811,7 @@ with tab_conversion:
                 st.download_button(
                     label="⬇️ Download Converted Audio (.wav)",
                     data=converted_bytes,
-                    file_name="hearmeai_converted.wav",
+                    file_name="voiceai_converted.wav",
                     mime="audio/wav",
                 )
             except Exception as exc:
@@ -915,7 +952,7 @@ with tab_advanced:
         st.download_button(
             label="⬇️ Download Config (.json)",
             data=config_json,
-            file_name="hearmeai_training_config.json",
+            file_name="voiceai_training_config.json",
             mime="application/json",
         )
 
@@ -982,7 +1019,7 @@ st.markdown("---")
 st.markdown(
     """
     <div class="footer">
-        <p style="margin: 0;">🎙️ <strong>HearMeAI</strong> — Advanced Speech AI Suite</p>
+        <p style="margin: 0;">🔊 <strong>VoiceAI</strong> — Advanced Speech AI Suite</p>
         <p style="margin: 5px 0 0 0; font-size: 12px; opacity: 0.7;">
             Powered by OpenAI Whisper · Built with Streamlit
         </p>

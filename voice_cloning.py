@@ -1,5 +1,5 @@
 """
-voice_cloning.py — Lightweight voice cloning for HearMeAI.
+voice_cloning.py — Lightweight voice cloning for VoiceAI.
 
 Approach (CPU-friendly, no GPU required):
   1. Load a short reference audio clip from the target speaker.
