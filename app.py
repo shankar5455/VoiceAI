@@ -49,91 +49,132 @@ st.set_page_config(
 # ============================================================================
 
 def apply_custom_css():
-    """Apply clean, minimal custom CSS styling"""
+    """Apply modern dark AI-themed CSS styling"""
     st.markdown(
         """
         <style>
-            /* Base */
-            .stApp { background: #f8fafc; }
-            
-            /* Cards */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+            /* ── Base ── */
+            html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+            .stApp {
+                background: linear-gradient(135deg, #0d0d1a 0%, #0f172a 50%, #0d1117 100%);
+                min-height: 100vh;
+            }
+
+            /* ── Sidebar ── */
+            [data-testid="stSidebar"] {
+                background: rgba(15, 23, 42, 0.95) !important;
+                border-right: 1px solid rgba(139, 92, 246, 0.2);
+            }
+            [data-testid="stSidebar"] * { color: #cbd5e1 !important; }
+            [data-testid="stSidebar"] h3,
+            [data-testid="stSidebar"] strong { color: #e2e8f0 !important; }
+
+            /* ── Cards ── */
             .card {
-                background: white;
+                background: rgba(255, 255, 255, 0.04);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
                 border-radius: 16px;
                 padding: 24px;
                 margin-bottom: 20px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-                border: 1px solid #e2e8f0;
-                transition: all 0.2s ease;
+                border: 1px solid rgba(139, 92, 246, 0.25);
+                transition: border-color 0.25s ease, box-shadow 0.25s ease;
+                color: #cbd5e1;
             }
             .card:hover {
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                border-color: #cbd5e1;
+                border-color: rgba(139, 92, 246, 0.55);
+                box-shadow: 0 0 24px rgba(139, 92, 246, 0.12);
             }
-            
-            /* Hero */
+            .card strong { color: #e2e8f0; }
+
+            /* ── Hero ── */
             .hero {
                 text-align: center;
-                padding: 32px 24px;
+                padding: 48px 24px 36px;
                 margin-bottom: 32px;
-                background: white;
+                background: rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
                 border-radius: 24px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(139, 92, 246, 0.2);
+                position: relative;
+                overflow: hidden;
+            }
+            .hero::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+                pointer-events: none;
             }
             .hero h1 {
-                font-size: 2.5rem;
-                font-weight: 600;
+                font-size: 3rem;
+                font-weight: 700;
                 margin: 0;
-                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                letter-spacing: -0.5px;
+                background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 50%, #34d399 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
+                background-clip: text;
             }
             .hero p {
-                font-size: 1rem;
-                color: #64748b;
-                margin-top: 8px;
+                font-size: 1.05rem;
+                color: #94a3b8;
+                margin-top: 10px;
             }
-            
-            /* Badges */
+
+            /* ── Badges ── */
             .badge-container {
-                margin-top: 16px;
+                margin-top: 18px;
                 display: flex;
                 justify-content: center;
                 gap: 8px;
                 flex-wrap: wrap;
             }
             .badge {
-                background: #f1f5f9;
-                padding: 4px 12px;
+                background: rgba(139, 92, 246, 0.15);
+                border: 1px solid rgba(139, 92, 246, 0.35);
+                padding: 5px 14px;
                 border-radius: 20px;
-                font-size: 0.75rem;
-                color: #475569;
+                font-size: 0.76rem;
+                color: #c4b5fd;
                 font-weight: 500;
+                transition: background 0.2s;
             }
-            
-            /* Metrics */
+            .badge:hover {
+                background: rgba(139, 92, 246, 0.28);
+            }
+
+            /* ── Metrics ── */
             .metric {
-                background: #f8fafc;
-                border-radius: 12px;
-                padding: 16px;
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 14px;
+                padding: 18px 14px;
                 text-align: center;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(139, 92, 246, 0.2);
+                transition: border-color 0.2s;
             }
+            .metric:hover { border-color: rgba(139, 92, 246, 0.45); }
             .metric-value {
-                font-size: 28px;
-                font-weight: 600;
-                color: #0f172a;
+                font-size: 30px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #a78bfa, #60a5fa);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
                 margin: 8px 0;
             }
             .metric-label {
-                font-size: 13px;
+                font-size: 12px;
                 color: #64748b;
-                font-weight: 500;
+                font-weight: 600;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.6px;
             }
-            
-            /* Speaker badges */
+
+            /* ── Speaker badges ── */
             .speaker-badge {
                 display: inline-block;
                 padding: 4px 12px;
@@ -142,72 +183,116 @@ def apply_custom_css():
                 font-weight: 500;
                 margin-right: 8px;
             }
-            
-            /* Tabs */
+
+            /* ── Tabs ── */
             .stTabs [data-baseweb="tab-list"] {
                 gap: 4px;
-                background: #f1f5f9;
+                background: rgba(255, 255, 255, 0.04);
                 border-radius: 12px;
                 padding: 4px;
+                border: 1px solid rgba(139, 92, 246, 0.15);
             }
             .stTabs [data-baseweb="tab"] {
                 border-radius: 8px;
-                padding: 8px 20px;
+                padding: 8px 22px;
                 font-weight: 500;
-                color: #475569;
+                color: #94a3b8;
+                transition: color 0.2s;
             }
             .stTabs [aria-selected="true"] {
-                background: white;
-                color: #0f172a;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(96, 165, 250, 0.25)) !important;
+                color: #e2e8f0 !important;
+                box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
             }
-            
-            /* Buttons */
+
+            /* ── Buttons ── */
             .stButton > button {
-                background: #0f172a;
+                background: linear-gradient(135deg, #7c3aed, #2563eb);
                 color: white;
                 border: none;
                 border-radius: 10px;
-                padding: 8px 20px;
-                font-weight: 500;
-                transition: all 0.2s;
+                padding: 9px 22px;
+                font-weight: 600;
+                letter-spacing: 0.2px;
+                transition: all 0.2s ease;
+                box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
             }
             .stButton > button:hover {
-                background: #1e293b;
-                transform: translateY(-1px);
+                background: linear-gradient(135deg, #6d28d9, #1d4ed8);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
             }
-            
-            /* Features */
+            .stButton > button:active { transform: translateY(0); }
+
+            /* ── Inputs / selects / sliders ── */
+            .stTextArea textarea,
+            .stTextInput input,
+            .stSelectbox select,
+            div[data-baseweb="select"] > div {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(139, 92, 246, 0.25) !important;
+                border-radius: 10px !important;
+                color: #e2e8f0 !important;
+            }
+            .stTextArea textarea:focus,
+            .stTextInput input:focus {
+                border-color: rgba(139, 92, 246, 0.6) !important;
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12) !important;
+            }
+            .stSlider [data-testid="stThumbValue"] { color: #e2e8f0; }
+
+            /* ── Features ── */
             .feature {
-                background: #f8fafc;
-                border-radius: 12px;
-                padding: 16px;
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 14px;
+                padding: 18px;
                 text-align: center;
-                border: 1px solid #e2e8f0;
-                transition: all 0.2s;
+                border: 1px solid rgba(139, 92, 246, 0.2);
+                transition: all 0.2s ease;
             }
             .feature:hover {
-                background: white;
-                border-color: #cbd5e1;
+                background: rgba(139, 92, 246, 0.1);
+                border-color: rgba(139, 92, 246, 0.5);
+                transform: translateY(-2px);
             }
-            .feature-icon { font-size: 28px; margin-bottom: 8px; }
-            .feature-title { font-weight: 600; color: #0f172a; margin: 8px 0 4px 0; }
+            .feature-icon { font-size: 30px; margin-bottom: 10px; }
+            .feature-title { font-weight: 600; color: #e2e8f0; margin: 8px 0 4px 0; }
             .feature-desc { font-size: 12px; color: #64748b; }
-            
-            /* Footer */
+
+            /* ── Section headings ── */
+            h3, .stMarkdown h3 { color: #c4b5fd !important; }
+
+            /* ── Footer ── */
             .footer {
                 text-align: center;
-                padding: 24px;
-                margin-top: 40px;
-                border-top: 1px solid #e2e8f0;
-                color: #64748b;
+                padding: 28px;
+                margin-top: 48px;
+                border-top: 1px solid rgba(139, 92, 246, 0.2);
+                color: #94a3b8;
                 font-size: 13px;
             }
-            
-            /* Misc */
-            hr { margin: 24px 0; border: none; border-top: 1px solid #e2e8f0; }
-            audio { border-radius: 8px; width: 100%; }
-            .stAlert { border-radius: 10px; border-left-width: 3px; }
+            .footer span {
+                background: linear-gradient(135deg, #a78bfa, #60a5fa);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                font-weight: 600;
+            }
+
+            /* ── Misc ── */
+            hr { margin: 24px 0; border: none; border-top: 1px solid rgba(139, 92, 246, 0.15); }
+            audio { border-radius: 10px; width: 100%; }
+            .stAlert { border-radius: 12px; border-left-width: 3px; }
+            .stExpander { border: 1px solid rgba(139, 92, 246, 0.2) !important; border-radius: 12px !important; }
+            [data-testid="stFileUploader"] {
+                border: 2px dashed rgba(139, 92, 246, 0.3) !important;
+                border-radius: 14px !important;
+                background: rgba(139, 92, 246, 0.04) !important;
+                transition: border-color 0.2s;
+            }
+            [data-testid="stFileUploader"]:hover {
+                border-color: rgba(139, 92, 246, 0.6) !important;
+            }
         </style>
         """,
         unsafe_allow_html=True,
@@ -749,7 +834,7 @@ def render_footer():
     st.markdown(
         """
         <div class="footer">
-            VoiceAI — Speech AI Suite • Powered by Whisper & Streamlit
+            <span>VoiceAI</span> — Speech AI Suite &nbsp;•&nbsp; Powered by Whisper &amp; Streamlit
         </div>
         """,
         unsafe_allow_html=True,
