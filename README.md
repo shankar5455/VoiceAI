@@ -175,6 +175,3 @@ Open your browser at **http://localhost:8501**.
 
 ---
 
-## 📄 License
-
-MIT © 2024 HearMeAI Contributors
