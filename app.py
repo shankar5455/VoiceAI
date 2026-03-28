@@ -1,6 +1,6 @@
 """
-app.py — VoiceAI: Speech AI Web App with Transcription, TTS, Voice Cloning,
-         Voice Conversion and Training.
+app.py — HearMeAI: Speech AI Web App with Transcription, TTS, Voice Cloning,
+         and Voice Conversion.
 
 Run with:
     streamlit run app.py
@@ -19,7 +19,6 @@ from diarization import perform_diarization, merge_transcript_diarization
 from tts import synthesize_speech
 from voice_cloning import clone_voice
 from voice_conversion import convert_voice
-from training import validate_dataset, generate_training_config, mock_training_step
 from utils import (
     save_uploaded_file,
     save_audio_bytes,

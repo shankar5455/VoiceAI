@@ -1,56 +1,22 @@
-# 🎙️ HearMeAI — Real-Time Speech-to-Text with Speaker Identification
+# 🎙️ HearMeAI
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)](https://streamlit.io/)
 [![Whisper](https://img.shields.io/badge/ASR-OpenAI%20Whisper-00C853.svg)](https://github.com/openai/whisper)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A hackathon-ready, end-to-end **Speech AI** web application that transcribes audio and
-labels different speakers — all running **locally** on CPU without any API keys.
-
----
-
-## 📌 Project Overview
-
-HearMeAI combines two core Speech AI tasks:
-
-| Task | Technology |
-|---|---|
-| Automatic Speech Recognition (ASR) | OpenAI Whisper (pretrained, local) |
-| Speaker Diarization | MFCC + K-Means clustering (scikit-learn) |
-
-Users can upload an audio file or record directly in the browser. HearMeAI will
-produce a colour-coded, timestamped transcript with speaker labels that can be
-downloaded as a `.txt` file.
+HearMeAI is an end-to-end **Speech AI** web application built with Streamlit. It transcribes audio, identifies different speakers, converts text to speech, and supports voice cloning and voice conversion — all running **locally** on CPU without any API keys.
 
 ---
 
 ## ✨ Features
 
-- 🎵 **Audio input** — upload `.wav`, `.mp3`, `.m4a`, `.ogg`, `.flac` *or* record from microphone
-- 🗣️ **Accurate ASR** — OpenAI Whisper (tiny / base / small / medium model selectable)
-- 👥 **Speaker diarization** — identifies 2–6 speakers; auto-detects count via silhouette score
-- 🌈 **Colour-coded transcript** — each speaker rendered in a distinct colour
-- ⏱️ **Timestamps** — every utterance shows `[MM:SS.ss → MM:SS.ss]`
-- 📊 **Speaker statistics** — speaking time and percentage per speaker
-- ⬇️ **Download transcript** — export plain-text `.txt` file
-- 🌐 **Multi-language** — auto-detect or specify English, French, Spanish, German, Hindi, Arabic
-- 💻 **CPU optimised** — runs on any modern laptop; no GPU required
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Language | Python 3.10+ |
-| UI | Streamlit 1.28+ |
-| ASR model | OpenAI Whisper (via `openai-whisper`) |
-| Deep learning | PyTorch (CPU inference) |
-| Audio features | librosa |
-| Clustering | scikit-learn KMeans |
-| Audio I/O | soundfile, pydub |
-| Microphone | audio-recorder-streamlit |
+- 🗣️ **Transcription** — upload or record audio and get a timestamped, colour-coded transcript with speaker labels
+- 🔊 **Text-to-Speech** — convert text to speech using gTTS (online) or pyttsx3 (offline)
+- 🎭 **Voice Cloning** — generate speech that matches the pitch of a reference speaker
+- 🔄 **Voice Conversion** — shift the pitch and speed of any audio to match a target voice
+- 🌐 **Multi-language** — auto-detect or choose from English, French, Spanish, German, Hindi, Arabic
+- 💻 **CPU-friendly** — no GPU required
 
 ---
 
@@ -59,23 +25,25 @@ downloaded as a `.txt` file.
 ```
 HearMeAI/
 ├── app.py              # Main Streamlit application
-├── asr.py              # Speech-to-text with OpenAI Whisper
+├── asr.py              # Speech-to-text using OpenAI Whisper
 ├── diarization.py      # Speaker diarization (MFCC + K-Means)
-├── utils.py            # Audio helpers, formatting, rendering
+├── tts.py              # Text-to-Speech (gTTS / pyttsx3)
+├── voice_cloning.py    # Voice cloning via pitch matching
+├── voice_conversion.py # Voice conversion (pitch shift + time stretch)
+├── utils.py            # Audio helpers and formatting utilities
 ├── requirements.txt    # Python dependencies
 └── README.md
 ```
 
 ---
 
-## ⚙️ Installation
-
-### Prerequisites
+## ⚙️ Prerequisites
 
 - Python **3.10** or higher
-- **ffmpeg** (required by Whisper and pydub for MP3 support)
+- **ffmpeg** installed and available on your PATH
 
 Install ffmpeg:
+
 ```bash
 # macOS
 brew install ffmpeg
@@ -83,32 +51,41 @@ brew install ffmpeg
 # Ubuntu / Debian
 sudo apt-get install ffmpeg
 
-# Windows
-# Download from https://ffmpeg.org/download.html and add to PATH
+# Windows — download from https://ffmpeg.org/download.html and add to PATH
 ```
-
-### Python dependencies
-
-```bash
-# Clone the repository
-git clone https://github.com/shankar5455/HearMeAI.git
-cd HearMeAI
-
-# (Optional) create a virtual environment
-python -m venv venv
-source venv/bin/activate        # macOS / Linux
-venv\Scripts\activate           # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-> **Note:** The first run will download the selected Whisper model weights
-> (~75 MB for `base`).  Subsequent runs reuse the cached weights.
 
 ---
 
-## 🚀 How to Run
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/shankar5455/HearMeAI.git
+cd HearMeAI
+```
+
+### 2. Create a virtual environment (optional but recommended)
+
+```bash
+python -m venv venv
+
+# macOS / Linux
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+> **Note:** The first run will download Whisper model weights (~75 MB for `base`). Subsequent runs reuse the cached weights.
+
+### 4. Run the app
 
 ```bash
 streamlit run app.py
@@ -120,58 +97,41 @@ Open your browser at **http://localhost:8501**.
 
 ## 🎬 Usage
 
-1. **Upload** a `.wav` or `.mp3` file using the *Upload Audio File* tab, **or**
-   click the microphone button in the *Record from Microphone* tab.
-2. *(Optional)* Adjust the Whisper model size, number of speakers, and language
-   in the left sidebar.
-3. Click **🚀 Process Audio**.
-4. View the colour-coded, timestamped transcript and speaker statistics.
-5. Click **⬇️ Download Transcript (.txt)** to save the results.
+### Transcription
+1. Go to the **Transcription** tab.
+2. Upload a `.wav`, `.mp3`, `.m4a`, `.ogg`, or `.flac` file, or record directly from your microphone.
+3. Optionally adjust the Whisper model size, number of speakers, and language in the sidebar.
+4. Click **Process Audio** to get a colour-coded, timestamped transcript.
+5. Download the transcript as a `.txt` file.
+
+### Text-to-Speech
+1. Go to the **Text-to-Speech** tab.
+2. Enter or paste text, choose an engine and language, then click **Generate Speech**.
+
+### Voice Cloning
+1. Go to the **Voice Cloning** tab.
+2. Upload a short reference audio clip from the target speaker.
+3. Enter the text to synthesise and click **Clone Voice**.
+
+### Voice Conversion
+1. Go to the **Voice Conversion** tab.
+2. Upload a source audio file and optionally a target reference audio.
+3. Adjust pitch and speed settings, then click **Convert Voice**.
 
 ---
 
-## 📸 Sample Output
+## 🛠️ Tech Stack
 
-```
-[00:00.00 → 00:03.50]  Speaker 1: Hello, welcome to HearMeAI.
-[00:03.60 → 00:07.20]  Speaker 2: Thanks! This is really impressive.
-[00:07.40 → 00:11.10]  Speaker 1: It uses Whisper for transcription and clustering for speakers.
-[00:11.20 → 00:14.80]  Speaker 2: Can it handle background noise?
-```
-
----
-
-## 🔬 How It Works
-
-### Speech-to-Text (ASR)
-
-1. Audio is converted to a **16 kHz mono WAV** using pydub/ffmpeg.
-2. Whisper's `transcribe()` method is called with `word_timestamps=True`.
-3. The output is a list of segments, each with `start`, `end`, and `text`.
-
-### Speaker Diarization
-
-1. A **sliding window** (1.5 s window, 0.5 s hop) scans the audio.
-2. Each window's **MFCC + Δ-MFCC** features are extracted via librosa.
-3. Features are **normalised** with `StandardScaler`.
-4. **K-Means clustering** groups windows into speaker clusters.
-   - When *auto-detect* is enabled, the number of clusters is chosen by
-     maximising the **silhouette score** over k = 2 … 4.
-5. Consecutive windows with the same cluster label are **merged** into speaker
-   segments; a majority-vote smoothing removes isolated outliers.
-6. Each Whisper segment is assigned the speaker whose diarization segment covers
-   its midpoint.
-
----
-
-## 🚧 Future Improvements
-
-- Real-time streaming transcription with Whisper + WebSocket
-- Pyannote.audio integration for neural-network–based diarization
-- Word-level speaker labels (token-level alignment)
-- Speaker voice profiles / recognition across sessions
-- Translation mode (transcribe + translate to English)
-- Docker container for one-command deployment
+| Component | Technology |
+|---|---|
+| UI | Streamlit |
+| ASR | OpenAI Whisper |
+| Deep learning | PyTorch (CPU) |
+| Audio features | librosa |
+| Speaker clustering | scikit-learn KMeans |
+| TTS | gTTS, pyttsx3 |
+| Audio I/O | soundfile, pydub |
+| Microphone | audio-recorder-streamlit |
 
 ---
 
